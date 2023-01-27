@@ -81,7 +81,6 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
 
 ADD https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
 ADD https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb /root
-RUN add-apt-repository restricted && echo "deb http://security.ubuntu.com/ubuntu/ focal-security main restricted universe multiverse" | tee -a /etc/apt/sources.list
 RUN curl -fSsL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/3bf863cc.pub | sudo gpg --dearmor | sudo tee /usr/share/keyrings/nvidia-drivers.gpg > /dev/null 2>&1
 RUN echo 'deb [signed-by=/usr/share/keyrings/nvidia-drivers.gpg] https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/ /' | sudo tee /etc/apt/sources.list.d/nvidia-drivers.list
 RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
@@ -93,7 +92,7 @@ RUN dpkg -i /root/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
   && cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/ \
   && apt-get update \
   && apt-get install cuda cuda-drivers\
-    nvidia-driver-525 \
-    nvidia-dkms-525 \
+    nvidia-driver-515 \
+    nvidia-dkms-515 \
     nvidia-cuda-toolkit \
     nvidia-docker2
