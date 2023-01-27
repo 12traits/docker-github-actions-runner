@@ -92,6 +92,6 @@ RUN add-apt-repository ppa:graphics-drivers/ppa \
   && dpkg -i /root/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
   && cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/ \
   && apt-get update \
-  && apt-get install cuda cuda-drivers nvidia-gds\
+  && apt-get install cuda cuda-drivers-470 nvidia-gds\
     nvidia-cuda-toolkit \
     nvidia-docker2
