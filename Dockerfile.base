@@ -12,12 +12,6 @@ ENV LC_ALL=en_US.UTF-8
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ENV DEBIAN_FRONTEND=noninteractive
 # hadolint ignore=SC2086,DL3015,DL3008,DL3013
-RUN apt-get install wget
-RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin \
-  && mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
-  && wget https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
-  && dpkg -i cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
-  && cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/
 RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
   && apt-get update \
   && apt-get install -y --no-install-recommends gnupg \
@@ -32,6 +26,7 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     zip \
     apt-transport-https \
     ca-certificates \
+    wget \
     sudo \
     gpg-agent \
     software-properties-common \
@@ -42,7 +37,6 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     libcurl4-openssl-dev \
     inetutils-ping \
     jq \
-    wget \
     dirmngr \
     openssh-client \
     locales \
@@ -53,7 +47,6 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
     nodejs \
     rsync \
     gosu \
-    cuda \
     nvidia-driver-515 nvidia-dkms-515 nvidia-cuda-toolkit \
   && DPKG_ARCH="$(dpkg --print-architecture)" \
   && LSB_RELEASE_CODENAME="$(lsb_release --codename | cut -f2)" \
@@ -87,3 +80,9 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
   && usermod -aG docker runner \
   && echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
+RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin \
+  && mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600 \
+  && wget https://developer.download.nvidia.com/compute/cuda/12.0.0/local_installers/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
+  && dpkg -i cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
+  && cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/ \
+  && apt-get update && apt-get install cuda
