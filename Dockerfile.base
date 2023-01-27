@@ -90,7 +90,7 @@ RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
             sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
 RUN dpkg -i /root/cuda-repo-ubuntu2204-12-0-local_12.0.0-525.60.13-1_amd64.deb \
   && cp /var/cuda-repo-ubuntu2204-12-0-local/cuda-*-keyring.gpg /usr/share/keyrings/ \
-  && apt-get update \
+  && apt-get search nvidia-driver && apt-get update \
   && apt-get install cuda cuda-drivers\
     nvidia-driver-515 \
     nvidia-dkms-515 \
