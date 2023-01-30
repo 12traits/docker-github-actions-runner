@@ -63,3 +63,15 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: kubernetes-deploy
+        uses: 12traits/github-action-workflows/.github/workflows/kubernetes-deploy.yml@main
+        secrets:
+          gcp-project-id: ${{ secrets.GKE_PROJECT_ID }}
+          k8s-sa-json: ${{ secrets.K8S_SET_IMAGE_SA_KEY }}
+          slack-build-webhook: ${{ secrets.SLACK_BUILD_WEBHOOK }}
+        with:
+          deployment-image: solsten-runner-staging
+          docker-image: solsten-runner
+          docker-tag: ${{ steps.vars-step.outputs.sha-short }}
+          cluster: staging
+          namespace: daemon
