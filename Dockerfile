@@ -10,8 +10,6 @@ ARG TARGETPLATFORM
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN apt-get update && apt-get install lpcsi nvidia-driver-525 nvidia-dkms-525
-
 WORKDIR /actions-runner
 COPY install_actions.sh /actions-runner
 
