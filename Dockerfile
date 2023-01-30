@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM myoung34/github-runner-base:latest
+FROM eu.gcr.io/original-list-207312/github-runner-base:master
 LABEL maintainer="myoung34@my.apsu.edu"
 
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
@@ -9,6 +9,8 @@ ARG GH_RUNNER_VERSION="2.301.1"
 ARG TARGETPLATFORM
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN apt-get update && apt-get install lpcsi nvidia-driver-525 nvidia-dkms-525
 
 WORKDIR /actions-runner
 COPY install_actions.sh /actions-runner
