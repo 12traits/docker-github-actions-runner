@@ -82,5 +82,5 @@ jobs:
           project_id: ${{ secrets.GKE_PROJECT_ID }}
       - name: Deploy
         run: |-
-          kubectl set image deployment solsten-runner-staging -n daemon solsten-runner-staging=${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten-runner:${{ steps.vars-step.outputs.sha-short }}
+          kubectl set image deployment solsten-runner-staging -n daemon solsten-runner-staging=${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/github-runner:${{ steps.vars-step.outputs.sha-short }}
           kubectl rollout status deployment/solsten-runner-staging -n daemon
