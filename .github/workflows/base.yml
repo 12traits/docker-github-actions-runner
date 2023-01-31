@@ -55,6 +55,6 @@ jobs:
           tags: |
             ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/github-runner-base:${{ steps.vars-step.outputs.sha-short }}
             ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/github-runner-base:${{ steps.vars-step.outputs.branch }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
