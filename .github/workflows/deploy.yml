@@ -18,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       DOCKER_REGISTRY: eu.gcr.io
+    outputs:
+      sha-short: ${{ steps.vars-step.outputs.sha-short }}
     steps:
       - name: Init git vars
         shell: bash
@@ -63,3 +65,16 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  kubernetes-deploy:
+    uses: 12traits/github-action-workflows/.github/workflows/kubernetes-deploy.yml@main
+    needs: ubuntu_latest_deploy
+    secrets:
+      gcp-project-id: ${{ secrets.GKE_PROJECT_ID }}
+      k8s-sa-json: ${{ secrets.K8S_SET_IMAGE_SA_KEY }}
+      slack-build-webhook: ${{ secrets.SLACK_BUILD_WEBHOOK }}
+    with:
+      deployment-image: solsten-runner-staging
+      docker-image: solsten-runner
+      docker-tag: ${{ needs.ubuntu_latest_deploy.outputs.sha-short }}
+      cluster: staging
+      namespace: daemon
