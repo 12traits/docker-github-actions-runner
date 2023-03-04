@@ -76,7 +76,7 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
   &&  echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
   && curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list \
-  && apt-get update && apt-get install -y kubectl yarn helm \
+  && apt-get update && apt-get install -y kubectl yarn helm golang-docker-credential-helpers\
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf /tmp/* \
   && groupadd -g 121 runner \
