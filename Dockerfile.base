@@ -85,6 +85,8 @@ RUN echo en_US.UTF-8 UTF-8 >> /etc/locale.gen \
   && useradd -mr -d /home/runner -u 1001 -g 121 runner \
   && usermod -aG sudo runner \
   && usermod -aG docker runner \
+  && wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
+  && chmod a+x /usr/local/bin/yq \
   && echo '%sudo ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 
 RUN distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
