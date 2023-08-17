@@ -18,7 +18,7 @@ jobs:
   ubuntu_latest_deploy:
     runs-on: ubuntu-latest
     env: 
-      DOCKER_REGISTRY: eu.gcr.io
+      DOCKER_REGISTRY: europe-west1-docker.pkg.dev
     outputs:
       sha-short: ${{ steps.vars-step.outputs.sha-short }}
     steps:
@@ -54,7 +54,7 @@ jobs:
           username: _json_key
           password: ${{ secrets.GCP_IMAGE_PUSH_SA_KEY }}
       - name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile

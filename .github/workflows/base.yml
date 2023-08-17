@@ -1,5 +1,6 @@
 name: GitHub Actions Runner in Docker - Base
 on:
+  workflow_dispatch:
   push:
     paths:
       - Dockerfile.base
@@ -12,7 +13,7 @@ jobs:
   ubuntu_base_latest_deploy:
     runs-on: ubuntu-latest
     env:
-      DOCKER_REGISTRY: eu.gcr.io
+      DOCKER_REGISTRY: europe-west1-docker.pkg.dev
     steps:
       - name: Init git vars
         shell: bash
@@ -46,15 +47,15 @@ jobs:
           username: _json_key
           password: ${{ secrets.GCP_IMAGE_PUSH_SA_KEY }}
       - name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: Dockerfile.base
           pull: true
           push: true
           tags: |
-            ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/github-runner-base:${{ steps.vars-step.outputs.sha-short }}
-            ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/github-runner-base:${{ steps.vars-step.outputs.branch }}
+            ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten/github-runner-base:${{ steps.vars-step.outputs.sha-short }}
+            ${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten/github-runner-base:${{ steps.vars-step.outputs.branch }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
