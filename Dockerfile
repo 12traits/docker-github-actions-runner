@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM eu.gcr.io/original-list-207312/github-runner-base:master
+FROM europe-west1-docker.pkg.dev/original-list-207312/solsten/github-runner-base:master
 LABEL maintainer="myoung34@my.apsu.edu"
 
 ENV AGENT_TOOLSDIRECTORY=/opt/hostedtoolcache
