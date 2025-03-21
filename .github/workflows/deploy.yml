@@ -84,8 +84,8 @@ jobs:
         run: |-
           kubectl set image deployment solsten-runner-staging -n daemon solsten-runner-staging=${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten/github-runner:${{ steps.vars-step.outputs.sha-short }}
           kubectl rollout status deployment/solsten-runner-staging -n daemon
-        # kubectl set image deployment solsten-runner-gpu-staging -n daemon solsten-runner-gpu-staging=${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten/github-runner:${{ steps.vars-step.outputs.sha-short }}
-        # kubectl rollout status deployment/solsten-runner-gpu-staging -n daemon
+          kubectl set image deployment solsten-runner-gpu-staging -n daemon solsten-runner-gpu-staging=${{ env.DOCKER_REGISTRY }}/${{ secrets.GKE_PROJECT_ID }}/solsten/github-runner:${{ steps.vars-step.outputs.sha-short }}
+          kubectl rollout status deployment/solsten-runner-gpu-staging -n daemon
       - name: Save deployment state into configmap
         run: |
           DEPLOYED_DATE=$(date '+%Y-%m-%d %H:%M:%S')
@@ -97,11 +97,11 @@ jobs:
           kubectl patch configmap deployment-solsten-runner-staging \
             -p '{"data": {"version": "${{ steps.vars-step.outputs.sha-short }}", "deployed_at": "'"$DEPLOYED_DATE"'"}}' \
             --namespace daemon
-        # kubectl create configmap deployment-solsten-runner-gpu-staging \
-        #   --from-literal version="${{ steps.vars-step.outputs.sha-short }}" \
-        #   --from-literal deployed_at="$DEPLOYED_DATE" \
-        #   --namespace daemon \
-        # || \
-        # kubectl patch configmap deployment-solsten-runner-gpu-staging \
-        #   -p '{"data": {"version": "${{ steps.vars-step.outputs.sha-short }}", "deployed_at": "'"$DEPLOYED_DATE"'"}}' \
-        #   --namespace daemon
+          kubectl create configmap deployment-solsten-runner-gpu-staging \
+            --from-literal version="${{ steps.vars-step.outputs.sha-short }}" \
+            --from-literal deployed_at="$DEPLOYED_DATE" \
+            --namespace daemon \
+          || \
+          kubectl patch configmap deployment-solsten-runner-gpu-staging \
+            -p '{"data": {"version": "${{ steps.vars-step.outputs.sha-short }}", "deployed_at": "'"$DEPLOYED_DATE"'"}}' \
+            --namespace daemon
