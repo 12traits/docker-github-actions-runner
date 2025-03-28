@@ -1,0 +1,45 @@
+name: Check Runner Version
+on:
+  schedule:
+    - cron: '0 0 * * *' # Daily check
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-version:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get latest runner version
+        id: version
+        run: |
+          LATEST=$(curl -s https://api.github.com/repos/actions/runner/releases/latest | jq -r .tag_name | sed 's/^v//')
+          echo "latest_version=$LATEST" >> $GITHUB_OUTPUT
+      - name: Compare versions
+        id: compare
+        run: |
+          CURRENT_VERSION=$(grep 'ARG GH_RUNNER_VERSION' Dockerfile | cut -d'=' -f2 | tr -d '"')
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          if [[ "$CURRENT_VERSION" != "${{ steps.version.outputs.latest_version }}" ]]; then
+              echo "update_needed=true" >> $GITHUB_OUTPUT
+          fi
+      - name: Update Dockerfile
+        if: steps.compare.outputs.update_needed == 'true'
+        run: |
+          sed -i 's/ENV GH_RUNNER_VERSION=.*/ENV GH_RUNNER_VERSION=${{ steps.version.outputs.latest_version }}/' Dockerfile
+      - name: Create PR
+        if: steps.compare.outputs.update_needed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.ORG_GITHUB_TOKEN }}
+          commit-message: "[Automated 🤖 ] Bump to version ${{ steps.version.outputs.latest_version }}"
+          title: "Update GitHub Runner to ${{ steps.version.outputs.latest_version }}"
+          body: |
+            Automated version bump from ${{ steps.compare.outputs.current_version }} to ${{ steps.version.outputs.latest_version }}
+          branch: "runner-update"
+          base: master
+          assignees: snickers54
+          reviewers: snickers54
