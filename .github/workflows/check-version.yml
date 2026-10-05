@@ -29,7 +29,7 @@ jobs:
       - name: Update Dockerfile
         if: steps.compare.outputs.update_needed == 'true'
         run: |
-          sed -i 's/ENV GH_RUNNER_VERSION=.*/ENV GH_RUNNER_VERSION=${{ steps.version.outputs.latest_version }}/' Dockerfile
+          sed -i 's/^ARG GH_RUNNER_VERSION=.*/ARG GH_RUNNER_VERSION="${{ steps.version.outputs.latest_version }}"/' Dockerfile
       - name: Create PR
         if: steps.compare.outputs.update_needed == 'true'
         uses: peter-evans/create-pull-request@v7
